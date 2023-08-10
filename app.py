@@ -15,6 +15,7 @@ cnt = mysql.connector.connect(
     host='127.0.0.1',
     database='website', 
 )
+
 cur = cnt.cursor(dictionary=True)
 
 app = Flask(
@@ -30,17 +31,15 @@ def index():
 
 @app.route('/signup',methods=["POST"])
 def ver():
-    cur.execute("SELECT * FROM member;")
 
-    user_list = []
-    for users in cur:
-        user_list.append(users["username"])
-        
     name = request.form.get("name", "")
     account = request.form.get("account", "")
     password = request.form.get("password", "")
+    signup = ("SELECT * FROM member WHERE username = %s;")
+    cur.execute(signup, (account,))
+    newmember = cur.fetchone()
 
-    if account in user_list:
+    if newmember!=None:
         return redirect("/error?message=帳號已被註冊")
     else:
         data = (name,account,password)
@@ -54,8 +53,8 @@ def ver():
 def mem():
     account = request.form.get("account", "")
     password = request.form.get("password", "")
-    
-    cur.execute(("SELECT name, username, password, id FROM member WHERE username='{}' and password = '{}' LIMIT 1;").format(account,password))
+    signin = ("SELECT name, username, password, id FROM member WHERE username= %s and password = %s LIMIT 1;")
+    cur.execute(signin,(account,password))
     member = cur.fetchone()
     
     if member !=None:
@@ -64,6 +63,7 @@ def mem():
         session["name"] = member["name"]
         session["account"] = member["username"]
         session["password"] = member["password"]
+        print(session)
         return redirect(url_for('member')) 
     else:
         return redirect("/error?message=請輸入正確的帳號密碼")
@@ -75,6 +75,7 @@ def member():
 
     if "name" in session:
         name = session["name"]
+        print(name)
         return render_template("member.html", user=name,text=data)
     else:
         return redirect(url_for('index'))
@@ -95,7 +96,7 @@ def message():
 def error():
     message = request.args.get("message", "")
     return render_template("error.html", message=message)
-
+    
 @app.route("/signout")
 def out():
     session.clear()
