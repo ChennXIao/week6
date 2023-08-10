@@ -14,10 +14,8 @@ cnt = mysql.connector.connect(
     password=secret_key,
     host='127.0.0.1',
     database='website', 
-
 )
-
-cur = cnt.cursor()
+cur = cnt.cursor(dictionary=True)
 
 app = Flask(
         __name__,
@@ -32,12 +30,11 @@ def index():
 
 @app.route('/signup',methods=["POST"])
 def ver():
-    cur.execute("SELECT name, username FROM member;")
+    cur.execute("SELECT * FROM member;")
 
     user_list = []
-    for (name, username) in cur:
-        user_list.append(username)
-    print(user_list)
+    for users in cur:
+        user_list.append(users["username"])
         
     name = request.form.get("name", "")
     account = request.form.get("account", "")
@@ -59,27 +56,27 @@ def mem():
     password = request.form.get("password", "")
     
     cur.execute(("SELECT name, username, password, id FROM member WHERE username='{}' and password = '{}' LIMIT 1;").format(account,password))
-    row = cur.fetchone()
+    member = cur.fetchone()
     
-    if row !=None:
-        name, username, password, id = row
-        session["id"] = id 
-        session["name"] = name
-        session["account"] = username
-        session["password"] = password
+    if member !=None:
+        
+        session["id"] = member["id"]
+        session["name"] = member["name"]
+        session["account"] = member["username"]
+        session["password"] = member["password"]
         print(session)
         return redirect(url_for('member')) 
     else:
         return redirect("/error?message=請輸入正確的帳號密碼")
 
-
 @app.route("/member")
 def member():
     cur.execute("SELECT name, member_id,content FROM member INNER JOIN message ON member.id = message.member_id ORDER BY message.time DESC;")
     data = cur.fetchall()
-    
+
     if "name" in session:
         name = session["name"]
+        print(name)
         return render_template("member.html", user=name,text=data)
     else:
         return redirect(url_for('index'))
