@@ -28,26 +28,15 @@
         <hr>
         <br>
         <div>
-            {% for t in text %}
-            <tr>
-                <td>{{ t[0] }}:</td>
-                <td>{{ t[2] }}</td><br>
-                <!-- {% if t[0] == user %}
-                <form action="/deleteMessage">
-                    <input type="button" id = "delete">x<br>
-                </form>
-                {% else %}
-                <br>
-                {% endif %} -->
 
-            </tr>
+            {% for t in text %}
+            <div>
+                {{ t.name }}:{{ t.content }}
+                <br>
+            </div>
             {% endfor %}
         </div>
     </div>
-    
 
-    
     <script src="interact.js"></script>
- 
-
 </body>
