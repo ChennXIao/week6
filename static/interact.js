@@ -1,20 +1,3 @@
-let q = document.getElementById("text-box");
-
-// q.addEventListener('submit', (e)=>{
-//     // e.preventDefault();
-//     let h = document.createElement("div");
-//     h.id = "msg";
-//     let text = document.getElementById("text").value;
-//     console.log(text);
-//     h.textContent = text;
-//     document.getElementById("message").appendChild(h);
-//     document.getElementById("text").value = "";
-//     e.preventDefault();
-//     // e.stopPropagation;
-//     return false;
-
-// });
-
 document.getElementById("btn").addEventListener('submit', (e)=>{
     // let q = document.getElementById("checked")
     let Account = document.getElementById("account")
@@ -45,17 +28,5 @@ document.getElementById("btn2").addEventListener('submit', (e)=>{
 
 }
 )
-
-// document.getElementById("forms").addEventListener("submit", function(event) {
-//     event.preventDefault(); 
-//     let number = document.getElementById("count").value;
-//     number = Number(number);
-//     if(Number.isInteger(number) == false || number<0){
-//         alert("請輸入正整數");
-//     }else{
-//         let square_url = '/square/'+ number;
-//         window.location.href = square_url;
-//     }
-// });
 
 
