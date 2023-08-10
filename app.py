@@ -64,7 +64,6 @@ def mem():
         session["name"] = member["name"]
         session["account"] = member["username"]
         session["password"] = member["password"]
-        print(session)
         return redirect(url_for('member')) 
     else:
         return redirect("/error?message=請輸入正確的帳號密碼")
@@ -76,7 +75,6 @@ def member():
 
     if "name" in session:
         name = session["name"]
-        print(name)
         return render_template("member.html", user=name,text=data)
     else:
         return redirect(url_for('index'))
